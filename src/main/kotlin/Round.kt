@@ -55,6 +55,8 @@ open class Round {
             root.leaves.add(new)
         }
 
+        fun getBorderChar(isCurrentRound: Boolean): String = if (isCurrentRound) "#" else "-"
+
         fun traverseRounds(
             sb: StringBuilder,
             padding: String,
@@ -63,7 +65,7 @@ open class Round {
             hasRightSibling: Boolean,
             currentRound: Round
         ) {
-            val borderChar = if (currentRound == round) "=" else "-"
+            val borderChar = getBorderChar(currentRound == round)
             if (round != null) {
                 sb.append("\n$padding│  ")
                 for (i in 0 until round.toString().length) {
@@ -112,7 +114,7 @@ class RootRound(game: Game): Round() {
 
     fun traversePreOrder(root: RootRound = this, currentRound: Round): String {
         val sb: StringBuilder = StringBuilder()
-        val borderChar = if (currentRound == root) "=" else "-"
+        val borderChar = getBorderChar(root == currentRound)
         for (i in 0 until root.toString().length) {
             sb.append(borderChar)
         }
