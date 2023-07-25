@@ -1,12 +1,13 @@
-open class Round() {
+open class Round {
     var parent: Round? = null
     var game: Game? = null
     var left: Round? = null
     var right: Round? = null
     var teams: Pair<Team?, Team?> = Pair(null, null)
     var winner: Team? = null
-    val isLeaf: Boolean
-        get() = left == null && right == null
+
+    /*val isLeaf: Boolean
+        get() = left == null && right == null*/
 
     val isUnfilled: Boolean
         get() = (left != null) xor (right != null)

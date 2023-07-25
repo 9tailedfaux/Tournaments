@@ -1,8 +1,8 @@
 import kotlin.random.Random
 
-class Bracket(private val games: ArrayList<Game>, val teams: ArrayList<Team>) {
-    val allRounds = ArrayList<Round>()
-    val selectedGames = ArrayList<Game>()
+class Bracket(private val games: ArrayList<Game>, private val teams: ArrayList<Team>) {
+    private val allRounds = ArrayList<Round>()
+    private val selectedGames = ArrayList<Game>()
     val finalRound: RootRound = RootRound(
         getGame()
     ).also { allRounds.add(it) }
@@ -27,7 +27,7 @@ class Bracket(private val games: ArrayList<Game>, val teams: ArrayList<Team>) {
         advanceRound()
     }
 
-    fun isOnFinalRound() = finalRound == currentRound
+    private fun isOnFinalRound() = finalRound == currentRound
 
     fun onRoundEnd(winningTeam: Team, winningPlayers: List<Player>? = null) {
         winningTeam.players.forEach {
@@ -52,7 +52,7 @@ class Bracket(private val games: ArrayList<Game>, val teams: ArrayList<Team>) {
         games.removeAt(Random.nextInt(0, games.size))
             .also { selectedGames.add(it) }
 
-    fun advanceRound() {
+    private fun advanceRound() {
         currentRound = allRounds.removeLast()
         if ((currentRound!!.teams.first == null) xor (currentRound!!.teams.second == null)) {
             onRoundEnd(currentRound!!.teams.first ?: currentRound!!.teams.second!!)

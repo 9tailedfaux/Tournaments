@@ -1,6 +1,4 @@
-import java.lang.NumberFormatException
-
-fun main(args: Array<String>) {
+fun main() {
     val games = arrayListOf(
         Game("rocket league", 1),
         Game("smash bros ultimate", 2),

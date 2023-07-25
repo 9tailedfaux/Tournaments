@@ -1,8 +1,7 @@
-class Team(val name: String, val players: ArrayList<Player>) {
+class Team(private val name: String, val players: ArrayList<Player>) {
 
-    val size: Int
-        get() = players.size
-    operator fun get(index: Int) = players[index]
+    /*val size: Int
+        get() = players.size*/
 
     fun getBans(numPlayersNeeded: Int): List<Player>? {
         val bans = players.filter { it.hasWon }
