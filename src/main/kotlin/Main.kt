@@ -19,7 +19,6 @@ fun main() {
         Game("dr robotnik's mean bean machine", 1),
         Game("ultimate chicken horse", 2),
         Game("kirby air ride", 1)
-
     )
     val teams = arrayListOf(
         Team("team 1", arrayListOf(
@@ -46,7 +45,7 @@ fun main() {
             Player("HAPPY"),
             Player("LOVE")
         )),
-        Team("team 7", arrayListOf(
+        /*Team("team 7", arrayListOf(
             Player("ASJSIEGSRG"),
             Player("skfhsghsog")
         )),
@@ -89,13 +88,13 @@ fun main() {
         Team("team 17", arrayListOf(
             Player("let the"),
             Player("destruction begin")
-        ))
+        ))*/
     )
 
     var exit = false
     var input: String
 
-    val bracket = Bracket(games, teams).apply { generate() }
+    var bracket = BracketWithLosers(games, teams).apply { generate() }
     println(bracket)
 
     while (!exit) {
@@ -108,25 +107,44 @@ fun main() {
             }
             "print" -> println(bracket)
             "end" -> endRound(bracket)
+            "randomize" -> {
+                bracket = BracketWithLosers(games, teams).apply { generate() }
+                println(bracket)
+            }
+            "reset" -> {
+                bracket.reset()
+                println(bracket)
+            }
+            "new" -> {
+                teams.clear()
+                bracket = BracketWithLosers(games, teams).apply { generate() }
+                println(bracket)
+            }
         }
 
-        if (bracket.finalRound.winner != null) {
-            println("Game over! ${bracket.currentRound!!.winner} wins!")
+        if (bracket.hasWinner) {
+            println("Game over! ${bracket.winner} wins!")
             exit = true
         }
     }
 }
 
-fun endRound(bracket: Bracket) {
+fun endRound(bracket: BracketWithLosers) {
     println("which team won?")
     println("1: ${bracket.currentRound!!.teams.first}")
     println("2: ${bracket.currentRound!!.teams.second}")
 
-    val teamInput = readln().let {
+    val winnerInput: Team
+    val loserInput: Team?
+
+    readln().let {
         if (it == "1") {
-            bracket.currentRound!!.teams.first!!
+            winnerInput = bracket.currentRound!!.teams.first!!
+            loserInput = bracket.currentRound!!.teams.second
+
         } else {
-            bracket.currentRound!!.teams.second!!
+            winnerInput = bracket.currentRound!!.teams.second!!
+            loserInput = bracket.currentRound!!.teams.first
         }
     }
 
@@ -135,7 +153,7 @@ fun endRound(bracket: Bracket) {
     do {
         try {
             println("which players won? (separate by commas)")
-            for ((index, player) in teamInput.players.withIndex()) {
+            for ((index, player) in winnerInput.players.withIndex()) {
                 println("${index + 1}: $player")
             }
 
@@ -143,7 +161,7 @@ fun endRound(bracket: Bracket) {
                 .ifBlank { null }
                 ?.replace(" ", "")
                 ?.split(",")
-                ?.map { teamInput.players[it.toInt() - 1] }
+                ?.map { winnerInput.players[it.toInt() - 1] }
 
             cont = true
         } catch (e: Exception) {
@@ -151,7 +169,7 @@ fun endRound(bracket: Bracket) {
         }
     } while (!cont)
 
-    bracket.onRoundEnd(teamInput, playersInput)
+    bracket.onRoundEnd(winnerInput, playersInput, loserInput)
 
     println(bracket)
 }

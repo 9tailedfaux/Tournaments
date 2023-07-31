@@ -1,14 +1,21 @@
 import kotlin.random.Random
 
-class Bracket(private val games: ArrayList<Game>, private val teams: ArrayList<Team>) {
-    private val allRounds = ArrayList<Round>()
+open class Bracket(private val games: ArrayList<Game>, private val teams: ArrayList<Team>): Resettable {
+    protected val allRounds = ArrayList<Round>()
     private val selectedGames = ArrayList<Game>()
-    val finalRound: RootRound = RootRound(
-        getGame()
+    protected val roundQueue = ArrayList<Round>()
+    protected val finalRound: RootRound = RootRound(
+        getGame(),
+        "main bracket"
     ).also { allRounds.add(it) }
     var currentRound: Round? = null
 
     fun generate() {
+        generate(finalRound, allRounds, teams, roundQueue)
+    }
+
+    protected fun generate(finalRound: RootRound, allRounds: ArrayList<Round>, teams: ArrayList<Team>, roundQueue: ArrayList<Round>) {
+        if (teams.isEmpty()) return
         while(finalRound.getLeafCount() < (teams.size / 2) + (teams.size % 2)) {
             Round().also {
                 finalRound.add(it)
@@ -24,12 +31,18 @@ class Bracket(private val games: ArrayList<Game>, private val teams: ArrayList<T
                 } else null
             )
         }
+        roundQueue.addAll(allRounds)
         advanceRound()
     }
 
+    open val hasWinner
+        get() = winner != null
+    open val winner
+        get() = finalRound.winner
+
     private fun isOnFinalRound() = finalRound == currentRound
 
-    fun onRoundEnd(winningTeam: Team, winningPlayers: List<Player>? = null) {
+    open fun onRoundEnd(winningTeam: Team, winningPlayers: List<Player>? = null) {
         winningTeam.players.forEach {
             it.hasWon = false
         }
@@ -48,12 +61,28 @@ class Bracket(private val games: ArrayList<Game>, private val teams: ArrayList<T
         if (!isOnFinalRound()) advanceRound()
     }
 
-    private fun getGame(): Game =
-        games.removeAt(Random.nextInt(0, games.size))
-            .also { selectedGames.add(it) }
+    protected fun getGame(): Game {
+        if (games.isEmpty()) {
+            games.addAll(selectedGames)
+            selectedGames.clear()
+        }
+        return games.removeAt(Random.nextInt(0, games.size))
+            .also {
+                selectedGames.add(it)
+                it.onSelected()
+            }
+    }
 
-    private fun advanceRound() {
-        currentRound = allRounds.removeLast()
+    protected open fun getNextRound(): Round? = roundQueue.removeLast()
+
+    protected open fun advanceRound() {
+        getNextRound()?.let {
+            currentRound = it
+            handleBypass()
+        }
+    }
+
+    private fun handleBypass() {
         if ((currentRound!!.teams.first == null) xor (currentRound!!.teams.second == null)) {
             onRoundEnd(currentRound!!.teams.first ?: currentRound!!.teams.second!!)
         }
@@ -61,6 +90,18 @@ class Bracket(private val games: ArrayList<Game>, private val teams: ArrayList<T
 
     override fun toString(): String {
         return finalRound.traversePreOrder(currentRound = currentRound!!)
+    }
+
+    override fun reset() {
+        currentRound = allRounds.last()
+        roundQueue.apply {
+            clear()
+            addAll(allRounds)
+        }
+        allRounds.forEach {
+            it.reset()
+        }
+        handleBypass()
     }
 }
 

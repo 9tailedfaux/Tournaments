@@ -1,4 +1,4 @@
-class Team(private val name: String, val players: ArrayList<Player>) {
+class Team(private val name: String, val players: ArrayList<Player>): Resettable {
 
     fun getBans(numPlayersNeeded: Int): List<Player>? {
         val bans = players.filter { it.hasWon }
@@ -11,5 +11,11 @@ class Team(private val name: String, val players: ArrayList<Player>) {
 
     override fun toString(): String {
         return name
+    }
+
+    override fun reset() {
+        players.forEach {
+            it.hasWon = false
+        }
     }
 }

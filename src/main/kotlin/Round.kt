@@ -1,4 +1,4 @@
-open class Round {
+open class Round: Resettable {
     var parent: Round? = null
     var game: Game? = null
     var left: Round? = null
@@ -6,8 +6,8 @@ open class Round {
     var teams: Pair<Team?, Team?> = Pair(null, null)
     var winner: Team? = null
 
-    /*val isLeaf: Boolean
-        get() = left == null && right == null*/
+    private val isLeaf: Boolean
+        get() = left == null && right == null
 
     val isUnfilled: Boolean
         get() = (left != null) xor (right != null)
@@ -25,6 +25,16 @@ open class Round {
                         }" else "?"
         } else {
             "${game ?: "Round"} won by $winner!"
+        }
+    }
+
+    override fun reset() {
+        if (isLeaf) {
+            teams.first?.reset()
+            teams.second?.reset()
+        } else {
+            teams = Pair(null, null)
+            game = null
         }
     }
 
@@ -101,7 +111,7 @@ open class Round {
     }
 }
 
-class RootRound(game: Game): Round() {
+class RootRound(game: Game, val name: String): Round() {
     init {
         this.game = game
     }
