@@ -12,23 +12,27 @@ fun main() {
         Game("tetris effect: connected", 1),
         Game("crash team racing nitro fueled", 2),
         Game("mighty switch force", 1),
-        Game("wii sports", 1, arrayListOf(
-            SubGame("tennis", 1),
-            SubGame("baseball", 1),
-            SubGame("bowling", 1),
-            SubGame("golf (3 holes)", 1),
-        )),
-        Game("wii sports resort", 1, arrayListOf(
-            SubGame("swordplay duel", 1),
-            SubGame("swordplay speed slice", 1),
-            SubGame("wakeboarding", 1),
-            SubGame("basketball pickup contest", 1),
-            SubGame("bowling", 1),
-            SubGame("canoeing", 1),
-            SubGame("golf (3 holes)", 1),
-            SubGame("table tennis", 1),
-            SubGame("airsports dogfight", 1),
-        )),
+        Game(
+            "wii sports", 1, arrayListOf(
+                SubGame("tennis", 1),
+                SubGame("baseball", 1),
+                SubGame("bowling", 1),
+                SubGame("golf (3 holes)", 1),
+            )
+        ),
+        Game(
+            "wii sports resort", 1, arrayListOf(
+                SubGame("swordplay duel", 1),
+                SubGame("swordplay speed slice", 1),
+                SubGame("wakeboarding", 1),
+                SubGame("basketball pickup contest", 1),
+                SubGame("bowling", 1),
+                SubGame("canoeing", 1),
+                SubGame("golf (3 holes)", 1),
+                SubGame("table tennis", 1),
+                SubGame("airsports dogfight", 1),
+            )
+        ),
         Game("tekken 7", 1),
         Game("dr mario", 1),
         Game("dr robotnik's mean bean machine", 1),
@@ -43,26 +47,36 @@ fun main() {
 
     )
     val teams = arrayListOf(
-        Team("team 1", arrayListOf(
-            Player("me"),
-            Player("you")
-        )),
-        Team("team 2", arrayListOf(
-            Player("jason"),
-            Player("derulo")
-        )),
-        Team("team 3", arrayListOf(
-            Player("happy"),
-            Player("girls")
-        )),
-        Team("team 4", arrayListOf(
-            Player("lucky"),
-            Player("GIRLS")
-        )),
-        Team("team 5", arrayListOf(
-            Player("PRE"),
-            Player("CURE")
-        )),
+        Team(
+            "team 1", arrayListOf(
+                Player("me"),
+                Player("you")
+            )
+        ),
+        Team(
+            "team 2", arrayListOf(
+                Player("jason"),
+                Player("derulo")
+            )
+        ),
+        Team(
+            "team 3", arrayListOf(
+                Player("happy"),
+                Player("girls")
+            )
+        ),
+        Team(
+            "team 4", arrayListOf(
+                Player("lucky"),
+                Player("GIRLS")
+            )
+        ),
+        Team(
+            "team 5", arrayListOf(
+                Player("PRE"),
+                Player("CURE")
+            )
+        ),
         /*Team("team 6", arrayListOf(
             Player("HAPPY"),
             Player("LOVE")
@@ -118,7 +132,7 @@ fun main() {
 
     var bracket = Bracket(games, teams).apply { generate() }
     var firstWinner: Team? = null
-    var secondWinner: Team? = null
+    var secondWinner: Team?
     println(bracket)
 
     while (!exit) {
@@ -129,6 +143,7 @@ fun main() {
                 println("exiting...")
                 exit = true
             }
+
             "print" -> println(bracket)
             "end" -> endRound(bracket)
         }
@@ -141,24 +156,23 @@ fun main() {
                     if (it == 'y') {
                         bracket = Bracket(bracket.games, bracket.losers, bracket.selectedGames).apply { generate() }
                         println(bracket)
-                    }
-                    else {
+                    } else {
                         println("Game over! ${bracket.currentRound!!.winner} wins!")
                         exit = true
                     }
                 }
             } else {
                 secondWinner = bracket.finalRound.winner
-                bracket = Bracket(bracket.games, arrayListOf(firstWinner, secondWinner!!), bracket.selectedGames).apply { generate() }
+                bracket = Bracket(
+                    bracket.games,
+                    arrayListOf(firstWinner, secondWinner!!),
+                    bracket.selectedGames
+                ).apply { generate() }
                 println(bracket)
             }
 
         }
     }
-}
-
-fun runLosersBracket(losers: ArrayList<Team>, games: ArrayList<Game>, selectedGames: ArrayList<Game>) {
-    val losersBracket = Bracket(games, losers, selectedGames).apply { generate() }
 }
 
 fun endRound(bracket: Bracket) {
