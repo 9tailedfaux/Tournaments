@@ -63,7 +63,7 @@ fun main() {
             Player("PRE"),
             Player("CURE")
         )),
-        Team("team 6", arrayListOf(
+        /*Team("team 6", arrayListOf(
             Player("HAPPY"),
             Player("LOVE")
         )),
@@ -110,13 +110,15 @@ fun main() {
         Team("team 17", arrayListOf(
             Player("let the"),
             Player("destruction begin")
-        ))
+        ))*/
     )
 
     var exit = false
     var input: String
 
-    val bracket = Bracket(games, teams).apply { generate() }
+    var bracket = Bracket(games, teams).apply { generate() }
+    var firstWinner: Team? = null
+    var secondWinner: Team? = null
     println(bracket)
 
     while (!exit) {
@@ -132,10 +134,31 @@ fun main() {
         }
 
         if (bracket.finalRound.winner != null) {
-            println("Game over! ${bracket.currentRound!!.winner} wins!")
-            exit = true
+            if (firstWinner == null) {
+                firstWinner = bracket.finalRound.winner
+                println("do you want to do a loser's bracket now? (y/n)")
+                readln().lowercase().replace(" ", "").elementAt(0).let {
+                    if (it == 'y') {
+                        bracket = Bracket(bracket.games, bracket.losers, bracket.selectedGames).apply { generate() }
+                        println(bracket)
+                    }
+                    else {
+                        println("Game over! ${bracket.currentRound!!.winner} wins!")
+                        exit = true
+                    }
+                }
+            } else {
+                secondWinner = bracket.finalRound.winner
+                bracket = Bracket(bracket.games, arrayListOf(firstWinner, secondWinner!!), bracket.selectedGames).apply { generate() }
+                println(bracket)
+            }
+
         }
     }
+}
+
+fun runLosersBracket(losers: ArrayList<Team>, games: ArrayList<Game>, selectedGames: ArrayList<Game>) {
+    val losersBracket = Bracket(games, losers, selectedGames).apply { generate() }
 }
 
 fun endRound(bracket: Bracket) {
