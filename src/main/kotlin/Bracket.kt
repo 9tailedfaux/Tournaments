@@ -2,7 +2,7 @@ import kotlin.random.Random
 
 class Bracket(val games: ArrayList<Game>, private val teams: ArrayList<Team>, val selectedGames: ArrayList<Game> = ArrayList()) {
     private val allRounds = ArrayList<Round>()
-    val losers = ArrayList<Team>()
+    private val losers = ArrayList<Team>()
     val finalRound: RootRound = RootRound(
         getGame()
     ).also { allRounds.add(it) }
@@ -69,6 +69,10 @@ class Bracket(val games: ArrayList<Game>, private val teams: ArrayList<Team>, va
 
     override fun toString(): String {
         return finalRound.traversePreOrder(currentRound = currentRound!!)
+    }
+
+    fun makeLosersBracket(): Bracket {
+        return Bracket(games, losers, selectedGames)
     }
 }
 

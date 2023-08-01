@@ -132,7 +132,7 @@ fun main() {
 
     var bracket = Bracket(games, teams).apply { generate() }
     var firstWinner: Team? = null
-    var secondWinner: Team?
+    var secondWinner: Team? = null
     println(bracket)
 
     while (!exit) {
@@ -154,23 +154,25 @@ fun main() {
                 println("do you want to do a loser's bracket now? (y/n)")
                 readln().lowercase().replace(" ", "").elementAt(0).let {
                     if (it == 'y') {
-                        bracket = Bracket(bracket.games, bracket.losers, bracket.selectedGames).apply { generate() }
+                        bracket = bracket.makeLosersBracket().apply { generate() }
                         println(bracket)
                     } else {
                         println("Game over! ${bracket.currentRound!!.winner} wins!")
                         exit = true
                     }
                 }
-            } else {
-                secondWinner = bracket.finalRound.winner
+            } else if (secondWinner == null) {
+                secondWinner = bracket.finalRound.winner!!
                 bracket = Bracket(
                     bracket.games,
-                    arrayListOf(firstWinner, secondWinner!!),
+                    arrayListOf(firstWinner, secondWinner),
                     bracket.selectedGames
                 ).apply { generate() }
                 println(bracket)
+            } else {
+                println("Game over! ${bracket.currentRound!!.winner} wins!")
+                exit = true
             }
-
         }
     }
 }

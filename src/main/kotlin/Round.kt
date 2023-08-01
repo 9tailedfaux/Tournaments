@@ -106,7 +106,7 @@ class RootRound(game: Game): Round() {
         this.game = game
     }
     val unfilled = ArrayList<Round>()
-    val leaves = ArrayList<Round>()
+    val leaves: ArrayList<Round> = arrayListOf(this)
     fun getLeafCount() = leaves.size
     fun add(new: Round) {
         add(this, new)
