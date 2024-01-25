@@ -237,7 +237,10 @@ fun endRound(bracket: Bracket) {
                 ?.split(",")
                 ?.map { teamInput.players[it.toInt() - 1] }
 
-            if (playersInput == null || playersInput.size > bracket.currentRound!!.game!!.maxPlayersPerTeam) {
+            if (playersInput == null) {
+                continue
+            }
+            else if (playersInput.size > bracket.currentRound!!.game!!.maxPlayersPerTeam) {
                 println("Entered too many players. ${bracket.currentRound!!.game!!.name} only supports ${bracket.currentRound!!.game!!.maxPlayersPerTeam} player${if (bracket.currentRound!!.game!!.maxPlayersPerTeam == 1) "" else "s" } per team")
                 continue
             }
