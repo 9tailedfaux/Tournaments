@@ -149,13 +149,21 @@ fun main() {
         input = readln()
         when (input) {
             "exit" -> {
-                println("exiting...")
-                exit = true
+                println("Are you sure you want to exit? (y/n)")
+                readln().let {
+                    when (it) {
+                        "y", "Y" -> {
+                            println("exiting...")
+                            exit = true
+                        }
+                    }
+                }
             }
 
             "print" -> println(bracket)
             "end" -> endRound(bracket)
             "reroll" -> reroll(bracket)
+            "help" -> printHelp()
         }
 
         if (bracket.finalRound.winner != null) {
@@ -185,6 +193,14 @@ fun main() {
             }
         }
     }
+}
+
+fun printHelp() {
+    println("exit:    terminates the program")
+    println("print:   prints the current bracket in its current state")
+    println("end:     ends the current round and asks you some questions about who won before advancing to the next round")
+    println("reroll:  draw a different game for the current round, recycling the existing game back into the pool")
+    println("help:    displays this message")
 }
 
 fun reroll(bracket: Bracket) {
