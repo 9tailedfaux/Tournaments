@@ -50,19 +50,26 @@ fun main() {
         Team(
             "team 1", arrayListOf(
                 Player("me"),
-                Player("you")
+                Player("you"),
+                Player("physically sick"),
+                Player("mentally thick"),
+                Player("fu"),
+                Player("ifgaf")
             )
         ),
         Team(
             "team 2", arrayListOf(
                 Player("jason"),
-                Player("derulo")
+                Player("derulo"),
+                Player("derulo2")
             )
         ),
         Team(
             "team 3", arrayListOf(
                 Player("happy"),
-                Player("girls")
+                Player("girls"),
+                Player("ASJSIEGSRG"),
+                Player("skfhsghsog")
             )
         ),
         Team(
@@ -74,7 +81,9 @@ fun main() {
         Team(
             "team 5", arrayListOf(
                 Player("PRE"),
-                Player("CURE")
+                Player("CURE"),
+                Player("HAPPY"),
+                Player("LOVE")
             )
         ),
         /*Team("team 6", arrayListOf(
@@ -146,6 +155,7 @@ fun main() {
 
             "print" -> println(bracket)
             "end" -> endRound(bracket)
+            "reroll" -> reroll(bracket)
         }
 
         if (bracket.finalRound.winner != null) {
@@ -177,18 +187,24 @@ fun main() {
     }
 }
 
+fun reroll(bracket: Bracket) {
+    bracket.rerollGame()
+    println(bracket)
+}
+
 fun endRound(bracket: Bracket) {
     println("which team won?")
     println("1: ${bracket.currentRound!!.teams.first}")
     println("2: ${bracket.currentRound!!.teams.second}")
 
     val teamInput = readln().let {
-        if (it == "1") {
-            bracket.currentRound!!.teams.first!!
-        } else {
-            bracket.currentRound!!.teams.second!!
+        when (it) {
+            "1" -> bracket.currentRound!!.teams.first!!
+            else -> bracket.currentRound!!.teams.second!!
         }
     }
+
+
 
     var playersInput: List<Player>? = null
     var cont = false
@@ -204,6 +220,11 @@ fun endRound(bracket: Bracket) {
                 ?.replace(" ", "")
                 ?.split(",")
                 ?.map { teamInput.players[it.toInt() - 1] }
+
+            if (playersInput == null || playersInput.size > bracket.currentRound!!.game!!.maxPlayersPerTeam) {
+                println("Entered too many players. ${bracket.currentRound!!.game!!.name} only supports ${bracket.currentRound!!.game!!.maxPlayersPerTeam} player${if (bracket.currentRound!!.game!!.maxPlayersPerTeam == 1) "" else "s" } per team")
+                continue
+            }
 
             cont = true
         } catch (e: Exception) {

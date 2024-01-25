@@ -1,6 +1,6 @@
 import kotlin.random.Random
 
-open class Game(private val name: String, val maxPlayersPerTeam: Int, private val subGames: ArrayList<SubGame>? = null) {
+open class Game(val name: String, val maxPlayersPerTeam: Int, private val subGames: ArrayList<SubGame>? = null) {
     private var chosenSubGame: SubGame? = null
 
     fun onSelected() {

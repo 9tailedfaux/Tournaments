@@ -74,5 +74,12 @@ class Bracket(val games: ArrayList<Game>, private val teams: ArrayList<Team>, va
     fun makeLosersBracket(): Bracket {
         return Bracket(games, losers, selectedGames)
     }
+
+    fun rerollGame() {
+        val oldGame = currentRound!!.game!!
+        currentRound!!.game = getGame()
+        selectedGames.remove(oldGame)
+        games.add(oldGame)
+    }
 }
 
