@@ -53,12 +53,18 @@ class Bracket(val games: ArrayList<Game>, private val teams: ArrayList<Team>, va
         if (!isOnFinalRound()) advanceRound()
     }
 
-    private fun getGame(): Game =
-        games.removeAt(Random.nextInt(0, games.size))
+    private fun getGame(): Game {
+        if (games.isEmpty()) {
+            games.addAll(selectedGames)
+            selectedGames.clear()
+        }
+        return games.removeAt(Random.nextInt(0, games.size))
             .also {
                 selectedGames.add(it)
                 it.onSelected()
             }
+    }
+
 
     private fun advanceRound() {
         currentRound = allRounds.removeLast()
