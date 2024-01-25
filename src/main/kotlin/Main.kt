@@ -232,8 +232,8 @@ fun endRound(bracket: Bracket) {
             }
 
             playersInput = readln()
+                .replace(" ", "")
                 .ifBlank { null }
-                ?.replace(" ", "")
                 ?.split(",")
                 ?.map { teamInput.players[it.toInt() - 1] }
 
