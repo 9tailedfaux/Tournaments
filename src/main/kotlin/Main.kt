@@ -164,7 +164,7 @@ fun main() {
             "end" -> endRound(bracket)
             "reroll" -> reroll(bracket)
             "changeround" -> changeRound(bracket)
-            "help" -> printHelp()
+            else -> printHelp()
         }
 
         if (bracket.finalRound.winner != null) {
