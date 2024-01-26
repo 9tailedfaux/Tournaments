@@ -208,11 +208,12 @@ fun changeRound(bracket: Bracket) {
 }
 
 fun printHelp() {
-    println("exit:    terminates the program")
-    println("print:   prints the current bracket in its current state")
-    println("end:     ends the current round and asks you some questions about who won before advancing to the next round")
-    println("reroll:  draw a different game for the current round, recycling the existing game back into the pool")
-    println("help:    displays this message")
+    println("exit:         terminates the program")
+    println("print:        prints the current bracket in its current state")
+    println("end:          ends the current round and asks you some questions about who won before advancing to the next round")
+    println("reroll:       draw a different game for the current round, recycling the existing game back into the pool")
+    println("changeround:  switches the current round to a different one without changing anything else")
+    println("help:         displays this message")
 }
 
 fun reroll(bracket: Bracket) {
