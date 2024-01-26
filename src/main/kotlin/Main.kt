@@ -146,7 +146,7 @@ fun main() {
 
     while (!exit) {
         print("tournament> ")
-        input = readln()
+        input = readln().lowercase().replace(" ", "")
         when (input) {
             "exit" -> {
                 println("Are you sure you want to exit? (y/n)")
@@ -163,6 +163,7 @@ fun main() {
             "print" -> println(bracket)
             "end" -> endRound(bracket)
             "reroll" -> reroll(bracket)
+            "changeround" -> changeRound(bracket)
             "help" -> printHelp()
         }
 
@@ -193,6 +194,17 @@ fun main() {
             }
         }
     }
+}
+
+fun changeRound(bracket: Bracket) {
+    println("Which round would you like to switch to?")
+    val round = readln().replace(" ", "").toIntOrNull()
+    if (round == null) {
+        println("invalid number. returning to main menu")
+        return
+    }
+    println(bracket.changeRound(round))
+    println(bracket)
 }
 
 fun printHelp() {

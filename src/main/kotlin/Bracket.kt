@@ -4,13 +4,16 @@ class Bracket(val games: ArrayList<Game>, private val teams: ArrayList<Team>, va
     private val allRounds = ArrayList<Round>()
     private val losers = ArrayList<Team>()
     val finalRound: RootRound = RootRound(
-        getGame()
+        getGame(),
+        1
     ).also { allRounds.add(it) }
     var currentRound: Round? = null
+    var currentRoundIndex = 0
 
     fun generate() {
+        var roundIndex = 2
         while(finalRound.getLeafCount() < (teams.size / 2) + (teams.size % 2)) {
-            Round().also {
+            Round(roundIndex++).also {
                 finalRound.add(it)
                 allRounds.add(it)
             }
@@ -24,6 +27,7 @@ class Bracket(val games: ArrayList<Game>, private val teams: ArrayList<Team>, va
                 } else null
             )
         }
+        currentRoundIndex = allRounds.size - 1
         advanceRound()
     }
 
@@ -67,7 +71,7 @@ class Bracket(val games: ArrayList<Game>, private val teams: ArrayList<Team>, va
 
 
     private fun advanceRound() {
-        currentRound = allRounds.removeLast()
+        currentRound = allRounds.findLast { it.isSwitchable || it.isProtoRound }
         if ((currentRound!!.teams.first == null) xor (currentRound!!.teams.second == null)) {
             onRoundEnd(currentRound!!.teams.first ?: currentRound!!.teams.second!!)
         }
@@ -86,6 +90,16 @@ class Bracket(val games: ArrayList<Game>, private val teams: ArrayList<Team>, va
         currentRound!!.game = getGame()
         selectedGames.remove(oldGame)
         games.add(oldGame)
+    }
+
+    fun changeRound(roundIndex: Int): String {
+        if (roundIndex > allRounds.size) {
+            return "there are only ${allRounds.size} rounds"
+        }
+        val round = allRounds[roundIndex - 1]
+        if (!round.isSwitchable) return "Round is unreachable (either undecided matchup or already won)"
+        currentRound = round
+        return "switched to round $roundIndex"
     }
 }
 

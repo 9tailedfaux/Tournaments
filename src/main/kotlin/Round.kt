@@ -1,4 +1,4 @@
-open class Round {
+open class Round(val roundNum: Int) {
     var parent: Round? = null
     var game: Game? = null
     var left: Round? = null
@@ -6,26 +6,33 @@ open class Round {
     var teams: Pair<Team?, Team?> = Pair(null, null)
     var winner: Team? = null
 
-    /*val isLeaf: Boolean
-        get() = left == null && right == null*/
+    private val isLeaf: Boolean
+        get() = left == null && right == null
 
     val isUnfilled: Boolean
         get() = (left != null) xor (right != null)
 
+    val isSwitchable: Boolean
+        get() = (teams.first != null) && (teams.second != null) && (winner == null) && (game != null)
+
+    val isProtoRound: Boolean
+        get() = ((teams.first == null) xor (teams.second == null)) && winner == null && isLeaf
+
     override fun toString(): String {
-        return if (winner == null) {
-            "${teams.first ?: "?"} vs ${teams.second ?: "?"}: " +
-                    if (teams.first != null && teams.second != null)
-                        "$game bans: ${
-                            teams.first?.getBans(game!!.maxPlayersPerTeam)
-                        } ${
-                            teams.second?.getBans(
-                                game!!.maxPlayersPerTeam
-                            )
-                        }" else "?"
-        } else {
-            "${game ?: "Round"} won by $winner!"
-        }
+        return "Round $roundNum: " +
+            if (winner == null) {
+                "${teams.first ?: "?"} vs ${teams.second ?: "?"}: " +
+                        if (teams.first != null && teams.second != null)
+                            "$game bans: ${
+                                teams.first?.getBans(game!!.maxPlayersPerTeam)
+                            } ${
+                                teams.second?.getBans(
+                                    game!!.maxPlayersPerTeam
+                                )
+                            }" else "?"
+            } else {
+                "${game ?: "Round"} won by $winner!"
+            }
     }
 
 
@@ -101,7 +108,7 @@ open class Round {
     }
 }
 
-class RootRound(game: Game): Round() {
+class RootRound(game: Game, roundNum: Int): Round(roundNum) {
     init {
         this.game = game
     }
