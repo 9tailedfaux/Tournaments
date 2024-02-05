@@ -1,0 +1,84 @@
+[
+  {
+    "name": "team 1",
+    "players": [
+      {
+        "name": "me"
+      },
+      {
+        "name": "you"
+      },
+      {
+        "name": "physically sick"
+      },
+      {
+        "name": "mentally thick"
+      },
+      {
+        "name": "fu"
+      },
+      {
+        "name": "idgaf"
+      }
+    ]
+  },
+  {
+    "name": "team 2",
+    "players": [
+      {
+        "name": "jason"
+      },
+      {
+        "name": "derulo"
+      },
+      {
+        "name": "derulo2"
+      }
+    ]
+  },
+  {
+    "name": "team 3",
+    "players": [
+      {
+        "name": "happy"
+      },
+      {
+        "name": "girls"
+      },
+      {
+        "name": "ASJSIEGSRG"
+      },
+      {
+        "name": "skfhsghsog"
+      }
+    ]
+  },
+  {
+    "name": "team 4",
+    "players": [
+      {
+        "name": "LUCKY"
+      },
+      {
+        "name": "GIRLS"
+      }
+    ]
+  },
+  {
+    "name": "team 5",
+    "players": [
+      {
+        "name": "PRE"
+      },
+      {
+        "name": "CURE"
+      },
+      {
+        "name": "HAPPY"
+      },
+      {
+        "name": "LOVE"
+      }
+    ]
+  }
+]
