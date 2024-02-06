@@ -26,9 +26,7 @@ open class Round(val roundNum: Int) {
                             "$game bans: ${
                                 teams.first?.getBans(game!!.maxPlayersPerTeam)
                             } ${
-                                teams.second?.getBans(
-                                    game!!.maxPlayersPerTeam
-                                )
+                                teams.second?.getBans(game!!.maxPlayersPerTeam)
                             }" else "?"
             } else {
                 "${game ?: "Round"} won by $winner!"

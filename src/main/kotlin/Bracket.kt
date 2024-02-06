@@ -8,7 +8,6 @@ class Bracket(val games: ArrayList<Game>, private val teams: ArrayList<Team>, va
         1
     ).also { allRounds.add(it) }
     var currentRound: Round? = null
-    var currentRoundIndex = 0
 
     fun generate() {
         var roundIndex = 2
@@ -27,7 +26,6 @@ class Bracket(val games: ArrayList<Game>, private val teams: ArrayList<Team>, va
                 } else null
             )
         }
-        currentRoundIndex = allRounds.size - 1
         advanceRound()
     }
 
@@ -72,7 +70,7 @@ class Bracket(val games: ArrayList<Game>, private val teams: ArrayList<Team>, va
 
     private fun advanceRound() {
         currentRound = allRounds.findLast { it.isSwitchable || it.isProtoRound }
-        if ((currentRound!!.teams.first == null) xor (currentRound!!.teams.second == null)) {
+        if (currentRound!!.isProtoRound) {
             onRoundEnd(currentRound!!.teams.first ?: currentRound!!.teams.second!!)
         }
     }

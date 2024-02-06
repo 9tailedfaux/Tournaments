@@ -86,7 +86,7 @@ fun main() {
                 Player("LOVE")
             )
         ),
-        /*Team("team 6", arrayListOf(
+        Team("team 6", arrayListOf(
             Player("HAPPY"),
             Player("LOVE")
         )),
@@ -133,7 +133,7 @@ fun main() {
         Team("team 17", arrayListOf(
             Player("let the"),
             Player("destruction begin")
-        ))*/
+        ))
     )
 
     var exit = false
